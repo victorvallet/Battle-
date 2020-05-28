@@ -1,22 +1,24 @@
 require 'sinatra/base'
-# set :session_secret, 'super secret'
 
 class Battle < Sinatra::Base
+  enable :sessions
 
 get '/' do
-  p params
-  @name = params[:name]
   erb(:index)
 end
 
 post '/names' do
-    @name = params[:name]
-    erb(:play)
+  session[:Player_1_name] = params[:Player_1_name]
+  session[:Player_2_name] = params[:Player_2_name]
+  erb(:play)
+  redirect '/play'
+end
+
+get '/play' do
+  @player_1 = session[:Player_1_name]
+  @player_2 = session[:Player_2_name]
+  erb(:play)
 end
 
 run! if app_file == $0
 end
-#
-# get '/secret' do
-#   'this is not secret'
-# end
